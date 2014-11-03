@@ -1,0 +1,28 @@
+CC = gcc
+DEBUG = -g
+CFLAGS = -Wall -Werror $(DEBUG)
+
+PROGS = huffman
+LIBS = heap.o node.h
+OBJS = main.o
+TESTS = tests.o
+UNIT_TESTS = unit_tests
+
+tests: $(LIBS) $(TESTS)
+	$(CC) $(CFLAGS) -o $(UNIT_TESTS) $(LIBS) $(TESTS)
+
+huffman: $(LIBS) $(OBJS)
+	$(CC) $(CFLAGS) -o huffman $(OBJS)
+
+main.o: main.c
+	$(CC) $(CFLAGS) -c main.c
+
+tests.o: tests.c
+	$(CC) $(CFLAGS) -c tests.c
+
+heap.o: heap.h heap.c
+	$(CC) $(CFLAGS) -c heap.c
+
+.PHONY: clean
+clean:
+	rm -rf $(PROGS) $(OBJS) $(UNIT_TESTS) $(TESTS) *~
