@@ -4,8 +4,8 @@
 /*#define HEAP_SIZE 256 */
 #define HEAP_SIZE 8
 
-#define SUCCESS 0
-#define FAILURE -1
+//#define SUCCESS 0
+//#define FAILURE -1
 
 struct node_t;
 

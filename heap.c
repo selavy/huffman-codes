@@ -1,8 +1,14 @@
+// TODO
+// Test if keeping array of (struct node_t) is better than pointers
+// maybe the cache locality will make up for the memcpys rather than
+// pointer assignments
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include "heap.h"
 #include "node.h"
+#include "return_codes.h"
 
 static struct node_t* arr[HEAP_SIZE];
 static int sz;

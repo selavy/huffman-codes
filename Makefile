@@ -3,7 +3,7 @@ DEBUG = -g
 CFLAGS = -Wall -Werror $(DEBUG)
 
 PROGS = huffman
-LIBS = heap.o node.h
+LIBS = heap.o node.h compress.o return_codes.h extract.o
 OBJS = main.o
 TESTS = tests.o
 UNIT_TESTS = unit_tests
@@ -12,7 +12,7 @@ tests: $(LIBS) $(TESTS)
 	$(CC) $(CFLAGS) -o $(UNIT_TESTS) $(LIBS) $(TESTS)
 
 huffman: $(LIBS) $(OBJS)
-	$(CC) $(CFLAGS) -o huffman $(OBJS)
+	$(CC) $(CFLAGS) -o huffman $(OBJS) $(LIBS)
 
 main.o: main.c
 	$(CC) $(CFLAGS) -c main.c
@@ -22,6 +22,12 @@ tests.o: tests.c
 
 heap.o: heap.h heap.c
 	$(CC) $(CFLAGS) -c heap.c
+
+compress.o: compress.h compress.c
+	$(CC) $(CFLAGS) -c compress.c
+
+extract.o: extract.h extract.c
+	$(CC) $(CFLAGS) -c extract.c
 
 .PHONY: clean
 clean:

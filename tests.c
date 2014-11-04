@@ -3,6 +3,7 @@
 #include <assert.h>
 #include "heap.h"
 #include "node.h"
+#include "input_module.h"
 
 #define NODE_INIT(node, w, cc) node.weight = w; node.c = cc;
 
@@ -15,13 +16,9 @@ void test_initialize_node() {
   struct node_t node;
   node.weight = 5;
   node.c = 'c';
-  node.left = NULL;
-  node.right = NULL;
   assert(node.weight == 5);
   assert(node.c == 'c');
-  assert(node.left == NULL);
-  assert(node.right == NULL);
-  assert(sizeof(struct node_t) == 24);
+  assert(sizeof(struct node_t) == 8);
 }
 
 void test_heap_insert() {
