@@ -3,7 +3,10 @@
 #include <assert.h>
 #include "heap.h"
 #include "node.h"
+#include "time.h"
 #include "input_module.h"
+
+#define SIZE UCHAR_MAX
 
 #define NODE_INIT(node, w, cc) node.weight = w; node.c = cc;
 
@@ -18,13 +21,15 @@ void test_initialize_node() {
   node.c = 'c';
   assert(node.weight == 5);
   assert(node.c == 'c');
-  assert(sizeof(struct node_t) == 8);
+  /*  assert(sizeof(struct node_t) == 8); */
+  assert(sizeof(struct node_t) == 24);
 }
 
 void test_heap_insert() {
   struct node_t a;
   struct node_t b;
   struct node_t c;
+
   struct node_t d;
   struct node_t e;
   struct node_t f;
@@ -77,61 +82,88 @@ void test_heap_empty() {
 }
 
 void test_heap_build() {
-  struct node_t a;
-  struct node_t b;
-  struct node_t c;
-  struct node_t d;
-  struct node_t e;
-  struct node_t f;
-  struct node_t g;
-  struct node_t* arr[7];
-  struct node_t* retVal;
+  /* struct node_t a; */
+  /* struct node_t b; */
+  /* struct node_t c; */
+  /* struct node_t d; */
+  /* struct node_t e; */
+  /* struct node_t f; */
+  /* struct node_t g; */
+  /* struct node_t* arr[7]; */
+  /* struct node_t* retVal; */
 
-  NODE_INIT(a, 100, 'a')
-  NODE_INIT(b, 98, 'b')
-  NODE_INIT(c, 102, 'c')
-  NODE_INIT(d, 104, 'd')
-  NODE_INIT(e, 99, 'e')
-  NODE_INIT(f, 103, 'f')
-  NODE_INIT(g, 140, 'g')
+  /* NODE_INIT(a, 100, 'a') */
+  /* NODE_INIT(b, 98, 'b') */
+  /* NODE_INIT(c, 102, 'c') */
+  /* NODE_INIT(d, 104, 'd') */
+  /* NODE_INIT(e, 99, 'e') */
+  /* NODE_INIT(f, 103, 'f') */
+  /* NODE_INIT(g, 140, 'g') */
 
-  arr[0] = &a;
-  arr[1] = &b;
-  arr[2] = &c;
-  arr[3] = &d;
-  arr[4] = &e;
-  arr[5] = &f;
-  arr[6] = &g;
+  /* arr[0] = &a; */
+  /* arr[1] = &b; */
+  /* arr[2] = &c; */
+  /* arr[3] = &d; */
+  /* arr[4] = &e; */
+  /* arr[5] = &f; */
+  /* arr[6] = &g; */
 
-  heap_build(arr);
+  /* heap_build(arr); */
 
-  assert(heap_size() == 7);
-  retVal = heap_pop();
-  assert(retVal->weight == 98);
-  retVal = heap_pop();
-  assert(retVal->weight == 99);
-  retVal = heap_pop();
-  assert(retVal->weight == 100);
-  retVal = heap_pop();
-  assert(retVal->weight == 102);
-  retVal = heap_pop();
-  assert(retVal->weight == 103);
-  retVal = heap_pop();
-  assert(retVal->weight == 104);
-  retVal = heap_pop();
-  assert(retVal->weight == 140);
-  
+  /* assert(heap_size() == 7); */
+  /* retVal = heap_pop(); */
+  /* assert(retVal->weight == 98); */
+  /* retVal = heap_pop(); */
+  /* assert(retVal->weight == 99); */
+  /* retVal = heap_pop(); */
+  /* assert(retVal->weight == 100); */
+  /* retVal = heap_pop(); */
+  /* assert(retVal->weight == 102); */
+  /* retVal = heap_pop(); */
+  /* assert(retVal->weight == 103); */
+  /* retVal = heap_pop(); */
+  /* assert(retVal->weight == 104); */
+  /* retVal = heap_pop(); */
+  /* assert(retVal->weight == 140); */
+
+
+  struct node_t * arr[SIZE];
+  int i;
+  int prev = 0;
+  struct node_t * node;
+
+  srand(time(NULL));
+
+  for (i = 0; i < SIZE; ++i) {
+    arr[i] = malloc(sizeof(struct node_t));
+    if (!arr[i]) { perror("malloc"); exit(1); }
+    arr[i]->weight = rand() % 500;
+    arr[i]->c = i;
+    arr[i]->left = 0;
+    arr[i]->right = 0;
+  }
+
   heap_initialize();
-  heap_finalize();
+  heap_build(arr);
   
+  node = heap_pop();
+  prev = node->weight;
+  free(node);
+  while(!heap_empty()) {
+    node = heap_pop();
+    assert(prev <= node->weight);
+    free(node);
+  }
+
+  heap_finalize();
 }
 
 int main(int argc, char ** argv) {
-  test_initialize_heap();
-  test_initialize_node();
-  test_heap_insert();
-  test_heap_empty();
-  test_heap_build();
+  test_initialize_heap(); printf("Passed test_initialize_heap\n");
+  test_initialize_node(); printf("Passed test_initialize_node\n");
+  test_heap_insert();     printf("Passed test_heap_insert\n");
+  test_heap_empty();      printf("Passed test_heap_empty\n");
+  test_heap_build();      printf("Passed test_heap_build\n");
   printf("Passed\n");
   return 0;
 }

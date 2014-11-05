@@ -1,14 +1,11 @@
 #ifndef HEAP_H_
 #define HEAP_H_
 
-/*#define HEAP_SIZE 256 */
-#define HEAP_SIZE 8
+#include <limits.h>
 
-//#define SUCCESS 0
-//#define FAILURE -1
+#define HEAP_SIZE (UCHAR_MAX + 1)
 
 struct node_t;
-
 int heap_initialize();
 int heap_finalize();
 int heap_build(struct node_t * arr_in[HEAP_SIZE - 1]);

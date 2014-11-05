@@ -96,7 +96,7 @@ int heap_empty() {
 void heap_print() {
   int i = 1;
   printf("HEAP PRINT\nSize = %d\n", sz);
-  for ( ; i <= sz; ++i) { printf("%c ", arr[i]->c); }
+  for ( ; i <= sz; ++i) { printf("%c = %d\n", arr[i]->c, arr[i]->weight); }
   printf("\n");
 }
 
