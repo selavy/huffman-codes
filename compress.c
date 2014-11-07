@@ -200,18 +200,25 @@ int module_finalize() {
   return SUCCESS;
 }
 
-/* TODO */
-/* Convert this to BFS to avoid recursion */
 void delete_huffman_tree(struct node_t * node) {
-  if (!node) return;
-#ifdef DEBUG
-  printf("visiting %c => %d\n", (node->c != NOT_LEAF_NODE ? (char) node->c : '0'), node->weight);
-#endif
-  delete_huffman_tree(node->left);
-  delete_huffman_tree(node->right);
-  node->left = 0;
-  node->right = 0;
-  free(node);
+  if (!node) {
+    return;
+  }
+
+  stack_initialize();
+  stack_push((int64_t) node);
+  while (!stack_empty()) {
+    struct node_t * n = (struct node_t *) stack_pop();
+    if (n->left) {
+      stack_push(n->left);
+    }
+    if (n->right) {
+      stack_push(n->right);
+    }
+    free(n);
+    n = 0;
+  }
+  stack_finalize();
 }
 
 #ifdef DEBUG
