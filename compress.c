@@ -93,7 +93,6 @@ static void print_unable_to_write_to_output() {
 // helper funcs
 //------------------------------------------------------------------------------
 int get_counts(char * file) {
-    /* FILE * stream; */
   int ch;
   bzero(&cnt[0], sizeof(cnt[0]) * CNT_SZ);
   in_stream = fopen(file, "r");
@@ -194,6 +193,9 @@ void create_conversion_map_helper(struct node_t * node, unsigned int value) {
 }
 
 int module_finalize() {
+  if (in_stream) {
+    fclose(in_stream);
+  }
   delete_huffman_tree(huffman_tree);
   return SUCCESS;
 }
@@ -241,7 +243,6 @@ int write_to_output() {
 
 int write_number(FILE * file, int value) {
   /* char buf[10]; /\* TODO can make 8? or 9? *\/ */
-  
   
   fprintf(file, "value = %d, ", value);
   fprintf(file, "|");

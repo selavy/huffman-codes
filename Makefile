@@ -1,9 +1,10 @@
 CC = gcc
 DEBUG = -g
-CFLAGS = -Wall -Werror $(DEBUG)
+#CFLAGS = -Wall -Werror $(DEBUG)
+CFLAGS = $(DEBUG)
 
 PROGS = huffman
-LIBS = heap.o node.h compress.o return_codes.h extract.o
+LIBS = heap.o node.h compress.o return_codes.h extract.o stack.o
 OBJS = main.o
 TESTS = tests.o
 UNIT_TESTS = unit_tests
@@ -28,6 +29,9 @@ compress.o: compress.h compress.c
 
 extract.o: extract.h extract.c
 	$(CC) $(CFLAGS) -c extract.c
+
+stack.o: stack.h stack.c
+	$(CC) $(CFLAGS) -c stack.c
 
 .PHONY: clean
 clean:

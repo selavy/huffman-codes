@@ -5,6 +5,7 @@
 #include "node.h"
 #include "time.h"
 #include "input_module.h"
+#include "stack.h"
 
 #define SIZE UCHAR_MAX
 
@@ -158,12 +159,45 @@ void test_heap_build() {
   heap_finalize();
 }
 
+void test_stack_initialize() {
+  assert(stack_initialize() == SUCCESS);
+  assert(stack_finalize() == SUCCESS);
+}
+
+void test_stack_empty() {
+  assert(stack_initialize() == SUCCESS);
+  assert(stack_empty());
+  assert(stack_push(24) == SUCCESS);
+  assert(!stack_empty());
+  assert(stack_pop() == 24);
+  assert(stack_empty());
+  assert(stack_finalize() == SUCCESS);
+}
+
+void test_stack_push_pop() {
+  int i = 0;
+  assert(stack_initialize() == SUCCESS);
+  
+  for (; i < 100; ++i) {
+    assert(stack_push(i) == SUCCESS);
+  }
+
+  for (i = 99; i >= 0; --i) {
+    assert(stack_pop() == i);
+  }
+
+  assert(stack_finalize() == SUCCESS);
+}
+
 int main(int argc, char ** argv) {
   test_initialize_heap(); printf("Passed test_initialize_heap\n");
   test_initialize_node(); printf("Passed test_initialize_node\n");
   test_heap_insert();     printf("Passed test_heap_insert\n");
   test_heap_empty();      printf("Passed test_heap_empty\n");
   test_heap_build();      printf("Passed test_heap_build\n");
+  test_stack_initialize(); printf("Passed test_stack_initialize\n");
+  test_stack_empty();     printf("Passed test_stack_empty\n");
+  test_stack_push_pop();  printf("Passed test_stack_push_pop\n");
   printf("Passed\n");
   return 0;
 }
