@@ -1,7 +1,7 @@
 CC = gcc
 DEBUG = -g
-#CFLAGS = -Wall -Werror $(DEBUG)
-CFLAGS = $(DEBUG)
+CFLAGS = -Wall -Werror $(DEBUG) -Wint-to-pointer-cast
+#CFLAGS = $(DEBUG) -Wint-to-pointer-cast
 
 PROGS = huffman
 LIBS = heap.o node.h compress.o return_codes.h extract.o stack.o

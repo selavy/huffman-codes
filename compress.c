@@ -34,7 +34,7 @@ static void delete_huffman_tree();
 #ifdef DEBUG
 static void traverse_tree(struct node_t * node);
 #endif
-static void conv_map_helper(struct node_t * node, unsigned int value, unsigned int level);
+static void create_conversion_map_helper(struct node_t * node, unsigned int value, unsigned int level);
 static int write_to_output();
 static int write_number(FILE * file, int value);
 
@@ -172,7 +172,7 @@ int generate_huffman_tree() {
 
 int create_conversion_map() {
   bzero(&(conversion_map[0]), sizeof(conversion_map[0]));
-  conv_map_helper(huffman_tree, 0, 0);
+  create_conversion_map_helper(huffman_tree, 0, 0);
   return SUCCESS;
 }
 
@@ -182,15 +182,15 @@ int create_conversion_map() {
 /* So, it _is_ possible that the tree would have a     */
 /* height over 32, there by causing value to overflow  */
 /* I need to find a way to handle this case.           */
-void conv_map_helper(struct node_t * node, unsigned int value, unsigned int level) {
+void create_conversion_map_helper(struct node_t * node, unsigned int value, unsigned int level) {
   if (!node) {
     return;
   } else if (node->c != NOT_LEAF_NODE) {
     conversion_map[node->c] = value | (1 << level);
     printf("Adding to conversion map: char(%c) ==> %d\n", node->c, value | (1 << level));
   } else {
-    conv_map_helper(node->left, value, level + 1);
-    conv_map_helper(node->right, value | (1 << level), level + 1);
+    create_conversion_map_helper(node->left, value, level + 1);
+    create_conversion_map_helper(node->right, value | (1 << level), level + 1);
   }
 }
 
