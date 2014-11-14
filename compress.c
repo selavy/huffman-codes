@@ -213,10 +213,10 @@ void delete_huffman_tree(struct node_t * node) {
   while (!stack_empty()) {
     n = (struct node_t *) stack_pop();
     if (n->left) {
-      stack_push(n->left);
+      stack_push((int64_t) n->left);
     }
     if (n->right) {
-      stack_push(n->right);
+      stack_push((int64_t) n->right);
     }
     free(n);
     n = 0;
