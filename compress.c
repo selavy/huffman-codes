@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <limits.h>
 #include <errno.h>
+#include "stack.h"
 #include "heap.h"
 #include "node.h"
 #include "return_codes.h"
@@ -13,7 +14,7 @@
 
 static int cnt[CNT_SZ];
 static struct node_t * huffman_tree;
-static unsigned int conversion_map[CNT_SZ];
+static uint64_t conversion_map[CNT_SZ];
 static FILE * in_stream;
 /* static FILE * out_stream; */
 
@@ -34,7 +35,7 @@ static void delete_huffman_tree();
 #ifdef DEBUG
 static void traverse_tree(struct node_t * node);
 #endif
-static void create_conversion_map_helper(struct node_t * node, unsigned int value, unsigned int level);
+static void create_conversion_map_helper(struct node_t * node, uint64_t value, uint64_t level);
 static int write_to_output();
 static int write_number(FILE * file, int value);
 
@@ -182,7 +183,7 @@ int create_conversion_map() {
 /* So, it _is_ possible that the tree would have a     */
 /* height over 32, there by causing value to overflow  */
 /* I need to find a way to handle this case.           */
-void create_conversion_map_helper(struct node_t * node, unsigned int value, unsigned int level) {
+void create_conversion_map_helper(struct node_t * node, uint64_t value, uint64_t level) {
   if (!node) {
     return;
   } else if (node->c != NOT_LEAF_NODE) {

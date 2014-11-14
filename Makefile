@@ -1,19 +1,20 @@
 CC = gcc
 DEBUG = -g
-CFLAGS = -Wall -Werror $(DEBUG) -Wint-to-pointer-cast
-#CFLAGS = $(DEBUG) -Wint-to-pointer-cast
+#CFLAGS = -Wall -Werror $(DEBUG) -Wint-to-pointer-cast
+CFLAGS = $(DEBUG) -Wint-to-pointer-cast
 
 PROGS = huffman
-LIBS = heap.o node.h compress.o return_codes.h extract.o stack.o
+INC = node.h return_codes.h
+LIBS = heap.o compress.o extract.o stack.o
 OBJS = main.o
 TESTS = tests.o
 UNIT_TESTS = unit_tests
 
-tests: $(LIBS) $(TESTS)
-	$(CC) $(CFLAGS) -o $(UNIT_TESTS) $(LIBS) $(TESTS)
+tests: $(LIBS) $(INC) $(TESTS)
+	$(CC) $(CFLAGS) -o $(UNIT_TESTS) $(LIBS) $(INC) $(TESTS)
 
-huffman: $(LIBS) $(OBJS)
-	$(CC) $(CFLAGS) -o huffman $(OBJS) $(LIBS)
+huffman: $(LIBS) $(INC) $(OBJS)
+	$(CC) $(CFLAGS) -o huffman $(OBJS) $(LIBS) $(INC)
 
 main.o: main.c
 	$(CC) $(CFLAGS) -c main.c
@@ -35,4 +36,4 @@ stack.o: stack.h stack.c
 
 .PHONY: clean
 clean:
-	rm -rf $(PROGS) $(OBJS) $(UNIT_TESTS) $(TESTS) *~
+	rm -rf $(PROGS) $(OBJS) $(UNIT_TESTS) $(TESTS) $(LIBS) *~
