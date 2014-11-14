@@ -189,6 +189,15 @@ void test_stack_push_pop() {
   assert(stack_finalize() == SUCCESS);
 }
 
+void test_b_len() {
+  assert(b_len(12) == 4);
+  assert(b_len(64) == 7);
+  assert(b_len(66) == 7);
+  assert(b_len(2) == 2);
+  assert(b_len(1) == 1);
+  assert(b_len(0) == 0);
+}
+
 int main(int argc, char ** argv) {
   test_initialize_heap(); printf("Passed test_initialize_heap\n");
   test_initialize_node(); printf("Passed test_initialize_node\n");
@@ -198,6 +207,7 @@ int main(int argc, char ** argv) {
   test_stack_initialize(); printf("Passed test_stack_initialize\n");
   test_stack_empty();     printf("Passed test_stack_empty\n");
   test_stack_push_pop();  printf("Passed test_stack_push_pop\n");
+  test_b_len();   printf("Passed test_b_len\n");
   printf("Passed\n");
   return 0;
 }

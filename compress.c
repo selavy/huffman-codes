@@ -252,8 +252,6 @@ int write_to_output() {
 }
 
 int write_number(FILE * file, int value) {
-  /* char buf[10]; /\* TODO can make 8? or 9? *\/ */
-  
   fprintf(file, "value = %d, ", value);
   fprintf(file, "|");
   if (value == 0) {

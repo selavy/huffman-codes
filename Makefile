@@ -5,7 +5,7 @@ CFLAGS = $(DEBUG) -Wint-to-pointer-cast
 
 PROGS = huffman
 INC = node.h return_codes.h
-LIBS = heap.o compress.o extract.o stack.o
+LIBS = heap.o compress.o extract.o stack.o binary_utility.o
 OBJS = main.o
 TESTS = tests.o
 UNIT_TESTS = unit_tests
@@ -33,6 +33,9 @@ extract.o: extract.h extract.c
 
 stack.o: stack.h stack.c
 	$(CC) $(CFLAGS) -c stack.c
+
+binary_utility.o: binary_utility.h binary_utility.c
+	$(CC) $(CFLAGS) -c binary_utility.c
 
 .PHONY: clean
 clean:
