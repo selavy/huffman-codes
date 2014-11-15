@@ -56,11 +56,11 @@ int main(int argc, char ** argv) {
 
   if (mode == COMPRESS_MODE) {
     if (compress(in_file, out_file) != SUCCESS) {
-      printf("Error compressing");
+      fprintf(stderr, "Error compressing");
     }
   } else if (mode == EXTRACT_MODE) {
     if (extract(in_file, out_file) != SUCCESS) {
-      printf("Error extracting");
+      fprintf(stderr, "Error extracting");
     }
   } else {
     print_usage(argv[0]);
