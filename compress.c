@@ -17,7 +17,8 @@ static int cnt[CNT_SZ];
 static struct node_t * huffman_tree;
 static uint64_t conversion_map[CNT_SZ];
 static FILE * in_stream;
-/* static FILE * out_stream; */
+/* DEBUG */
+static FILE * out_stream;
 
 // error funcs
 //------------------------------------------------------------------------------
@@ -38,12 +39,14 @@ static void traverse_tree(struct node_t * node);
 #endif
 static void create_conversion_map_helper(struct node_t * node, uint64_t value, uint64_t level);
 static int write_to_output();
-static int write_number(FILE * file, int value, int * offset, unsigned char * curr_byte);
+static int write_number(int value, int * offset, unsigned char * curr_byte);
+static int print_conversion_map_header();
 
 // do work
 //------------------------------------------------------------------------------
 int compress(char * file_in, char * file_out) {
   huffman_tree = 0;
+  out_stream = stdout;
   if (get_counts(file_in) != SUCCESS) {
     print_unable_to_open_file_msg(file_in);
     module_finalize();
@@ -247,7 +250,7 @@ int write_to_output() {
   }
   
   while((ch = fgetc(in_stream)) != EOF) {
-    write_number(stdout, conversion_map[ch], &offset, &byte);
+    write_number(conversion_map[ch], &offset, &byte);
   }
   if (byte > 0) {
     fprintf(stdout, "|%d|\n", byte);
@@ -257,19 +260,19 @@ int write_to_output() {
   return SUCCESS;
 }
 
-int write_number(FILE * file, int value, int * curr_offset, unsigned char * curr_byte) {
+int write_number(int value, int * curr_offset, unsigned char * curr_byte) {
   int offset = *curr_offset;
   unsigned char byte = *curr_byte;
 
   if (offset >= 8) {
-    fprintf(file, "|%d|", byte);
+    fprintf(out_stream, "|%d|", byte);
   }
   if (value == 0) {
     ++offset;
   } else {
     while (value > 1) {
       if (offset >= 8) {
-	fprintf(file, "|%d|", byte);
+	fprintf(out_stream, "|%d|", byte);
 	byte = 0;
 	offset = 0;
       }
@@ -278,7 +281,7 @@ int write_number(FILE * file, int value, int * curr_offset, unsigned char * curr
     }
   }
   if (offset >= 8) {
-    fprintf(file, "|%d|", byte);
+    fprintf(out_stream, "|%d|", byte);
     byte = 0;
     offset = 0;
   }
