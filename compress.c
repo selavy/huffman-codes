@@ -96,7 +96,7 @@ static void print_unable_to_write_to_output() {
 //------------------------------------------------------------------------------
 int get_counts(char * file) {
   int ch;
-  bzero(&cnt[0], sizeof(cnt[0]) * CNT_SZ);
+  memset(&cnt[0], '\0', sizeof(cnt[0] * CNT_SZ));
   in_stream = fopen(file, "r");
   if (!in_stream) {
     return FAILURE;
@@ -173,7 +173,7 @@ int generate_huffman_tree() {
 }
 
 int create_conversion_map() {
-  bzero(&(conversion_map[0]), sizeof(conversion_map[0]));
+  memset(&conversion_map[0], 0, sizeof(conversion_map[0]));
   create_conversion_map_helper(huffman_tree, 0, 0);
   return SUCCESS;
 }
