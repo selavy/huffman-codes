@@ -7,6 +7,7 @@
 #include "stack.h"
 #include "heap.h"
 #include "node.h"
+#include "binary_utility.h"
 #include "return_codes.h"
 
 #define CNT_SZ UCHAR_MAX
@@ -37,7 +38,7 @@ static void traverse_tree(struct node_t * node);
 #endif
 static void create_conversion_map_helper(struct node_t * node, uint64_t value, uint64_t level);
 static int write_to_output();
-static int write_number(FILE * file, int value);
+static int write_number(FILE * file, int value, int * offset, unsigned char * curr_byte);
 
 // do work
 //------------------------------------------------------------------------------
@@ -238,30 +239,51 @@ void traverse_tree(struct node_t * node) {
 #endif
 
 int write_to_output() {
-   int ch;
+  int offset = 0;
+  unsigned char byte = 0;
+  int ch;
   if (!in_stream) {
     return FAILURE;
   }
   
   while((ch = fgetc(in_stream)) != EOF) {
-    write_number(stdout, conversion_map[ch]);
+    write_number(stdout, conversion_map[ch], &offset, &byte);
+  }
+  if (byte > 0) {
+    fprintf(stdout, "|%d|\n", byte);
   }
   printf("\n");
 
   return SUCCESS;
 }
 
-int write_number(FILE * file, int value) {
-  fprintf(file, "value = %d, ", value);
-  fprintf(file, "|");
+int write_number(FILE * file, int value, int * curr_offset, unsigned char * curr_byte) {
+  int offset = *curr_offset;
+  unsigned char byte = *curr_byte;
+
+  if (offset >= 8) {
+    fprintf(file, "|%d|", byte);
+  }
   if (value == 0) {
-    fprintf(file, "0");
+    ++offset;
   } else {
     while (value > 1) {
-      fprintf(file, "%d", value & 1);
+      if (offset >= 8) {
+	fprintf(file, "|%d|", byte);
+	byte = 0;
+	offset = 0;
+      }
+      byte |= ((value & 1) << (7 - offset++));
       value >>= 1;
     }
   }
-  fprintf(file, "|\n");
+  if (offset >= 8) {
+    fprintf(file, "|%d|", byte);
+    byte = 0;
+    offset = 0;
+  }
+
+  *curr_offset = offset;
+  *curr_byte = byte;
   return SUCCESS;
 }

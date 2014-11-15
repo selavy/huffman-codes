@@ -198,6 +198,14 @@ void test_b_len() {
   assert(b_len(0) == 0);
 }
 
+void test_b_reverse() {
+  assert(b_reverse(0) == 0);
+  assert(b_reverse(1) == 1);
+  assert(b_reverse(12) == 3);
+  assert(b_reverse(64) == 1);
+  assert(b_reverse(65) == 65);
+}
+
 int main(int argc, char ** argv) {
   test_initialize_heap(); printf("Passed test_initialize_heap\n");
   test_initialize_node(); printf("Passed test_initialize_node\n");
@@ -207,7 +215,8 @@ int main(int argc, char ** argv) {
   test_stack_initialize(); printf("Passed test_stack_initialize\n");
   test_stack_empty();     printf("Passed test_stack_empty\n");
   test_stack_push_pop();  printf("Passed test_stack_push_pop\n");
-  test_b_len();   printf("Passed test_b_len\n");
+  test_b_len();           printf("Passed test_b_len\n");
+  test_b_reverse();       printf("Passed test_b_reverse\n");
   printf("Passed\n");
   return 0;
 }
