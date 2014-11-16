@@ -75,16 +75,19 @@ int compress(char * file_in, char * file_out) {
 
   if (open_output(file_out) != SUCCESS) {
     print_unable_to_open_output_file(file_out);
+    module_finalize();
     return FAILURE;
   }
 
   if (print_conversion_map_header() != SUCCESS) {
     print_unable_to_write_to_output();
+    module_finalize();
     return FAILURE;
   }
 
   if (write_to_output() != SUCCESS) {
     print_unable_to_write_to_output();
+    module_finalize();
     return FAILURE;
   }
 
@@ -228,6 +231,9 @@ void create_conversion_map_helper(struct node_t * node, uint64_t value, uint64_t
 int module_finalize() {
   if (in_stream) {
     fclose(in_stream);
+  } 
+  if (out_stream) {
+    fclose(out_stream);
   }
   delete_huffman_tree(huffman_tree);
   return SUCCESS;

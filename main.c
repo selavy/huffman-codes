@@ -35,20 +35,24 @@ int main(int argc, char ** argv) {
     exit(0);
   } else {
     unknown_option(argv[1], argv[0]);
-    exit(0);
+    exit(1);
   }
 
   in_file = argv[2];
   if (argc > 3) {
     out_file = malloc(strlen(argv[3]) + 1);
     strcpy(out_file, argv[3]);
-  } else {
+  } else if (mode == COMPRESS_MODE) {
     out_file = malloc(strlen(argv[2])+4);
     if (!out_file) {
       prt_n_quit("malloc");
     }
     strcpy(out_file, argv[2]);
     strcat(out_file, ".hf");
+  } else {
+    printf("output filename required.\n\n");
+    print_usage(argv[0]);
+    exit(1);
   }
 
 // real work
