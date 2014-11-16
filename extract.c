@@ -72,14 +72,18 @@ int read_header() {
   char * p;
   p = (char *) &size; 
   for (i = 0; i < sizeof(int); ++i) {
-    fscanf(in_stream, "%c", p++);
+    if(fscanf(in_stream, "%c", p++) != 1) {
+      return FAILURE;
+    }
   }
   printf("size = %d.\n", size);
   for (i = 0; i < size; ++i) {
     fscanf(in_stream, "%c", &c);
     p = (char *) &r;
     for (j = 0; j < sizeof(uint64_t); ++j) {
-      fscanf(in_stream, "%c", p++);
+      if(fscanf(in_stream, "%c", p++) != 1) {
+	return FAILURE;
+      }
     }
     printf("%c --> %" PRIu64 "\n", c, r);
   }
