@@ -58,7 +58,7 @@ int compress(char * file_in, char * file_out) {
     module_finalize();
     return FAILURE;
   }
-
+#ifdef DEBUG
   printf("--COUNTS--\n");
   for (i = 0; i < CNT_SZ; ++i) {
     if (cnt[i]) {
@@ -66,6 +66,7 @@ int compress(char * file_in, char * file_out) {
     }
   } 
   printf("--END COUNTS--\n");
+#endif
   if (generate_huffman_tree() != SUCCESS) {
     print_unable_to_generate_huffman_tree();
     module_finalize();
@@ -228,7 +229,9 @@ void create_conversion_map_helper(struct node_t * node, uint64_t value, uint64_t
   } else if (node->c != NOT_LEAF_NODE) {
     conversion_map[node->c] = value | (1 << level);
     ++conversion_map_size;
+#ifdef DEBUG
     printf("Adding to conversion map: char(%c) ==> %"PRIu64"\n", node->c, value | (1 << level));
+#endif
   } else {
     create_conversion_map_helper(node->left, value, level + 1);
     create_conversion_map_helper(node->right, value | (1 << level), level + 1);
@@ -291,13 +294,15 @@ int write_to_output() {
     write_number(conversion_map[ch], &offset, &byte);
   }
   if (byte > 0) {
+#ifdef DEBUG
     printf("|%d\n", byte); 
+#endif
     fprintf(out_stream, "%c", byte);
   }
   fprintf(out_stream, "%c", (char) offset);
+#ifdef DEBUG
   printf("offset = %d\n", offset);
-  /* printf("\n"); */
-
+#endif
   return SUCCESS;
 }
 
@@ -306,7 +311,9 @@ int write_number(int value, int * curr_offset, unsigned char * curr_byte) {
   unsigned char byte = *curr_byte;
 
   if (offset >= 8) {
+#ifdef DEBUG
     printf("|%d", byte);
+#endif
     fprintf(out_stream, "%c", byte);
   }
   if (value == 0) {
@@ -314,7 +321,9 @@ int write_number(int value, int * curr_offset, unsigned char * curr_byte) {
   } else {
     while (value > 1) {
       if (offset >= 8) {
+#ifdef DEBUG
 	printf("|%d", byte);
+#endif
 	fprintf(out_stream, "%c", byte);
 	byte = 0;
 	offset = 0;
@@ -324,7 +333,9 @@ int write_number(int value, int * curr_offset, unsigned char * curr_byte) {
     }
   }
   if (offset >= 8) {
+#ifdef DEBUG
     printf("|%d", byte);
+#endif
     fprintf(out_stream, "%c", byte);
     byte = 0;
     offset = 0;
