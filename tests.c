@@ -207,6 +207,12 @@ void test_b_reverse() {
   assert(b_reverse(65) == 65);
 }
 
+void test_b_flip() {
+  assert(b_flip(2, 2) == 1);
+  assert(b_flip(1, 3) == 4);
+  assert(b_flip(1, 4) == 8);
+}
+
 void test_b_flip_code() {
   assert(b_flip_code(6) == 5);
   assert(b_flip_code(5) == 6);
@@ -225,6 +231,7 @@ int main(int argc, char ** argv) {
   test_stack_push_pop();  printf("Passed test_stack_push_pop\n");
   test_b_len();           printf("Passed test_b_len\n");
   test_b_reverse();       printf("Passed test_b_reverse\n");
+  test_b_flip();          printf("Passsed test_b_flip\n");
   test_b_flip_code();     printf("Passed test_b_flip_code\n");
   printf("Passed\n");
   return 0;
