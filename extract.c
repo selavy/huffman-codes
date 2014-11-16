@@ -111,7 +111,6 @@ int read_header() {
 int read_file() {
   /* The mark should be at the end of the header */
   /* and output file should be open.             */
-
   char c;
   int i;
   uint64_t val = 1;
@@ -119,11 +118,11 @@ int read_file() {
   printf("---READ FILE---\n");
   /* while ((c = fgetc(in_stream) != EOF)) { */
   while (fscanf(in_stream, "%c", &c) == 1) {
-    printf("%d\n", c);
     for (i = 0; i < 8; ++i) {
-      val = (val << 1) | (c & (1 << i));
+      val = (val << 1) | !!(c & (1 << (7-i)));
       if ((res = find_in_map(val)) != NOT_FOUND) {
         printf("FOUND: %c\n", res);
+        fprintf(out_stream, "%c", res);
         val = 1;
       }
     }
