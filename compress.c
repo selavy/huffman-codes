@@ -222,7 +222,7 @@ void create_conversion_map_helper(struct node_t * node, uint64_t value, uint64_t
   } else if (node->c != NOT_LEAF_NODE) {
     conversion_map[node->c] = value | (1 << level);
     ++conversion_map_size;
-    /* printf("Adding to conversion map: char(%c) ==> %d\n", node->c, value | (1 << level)); */
+    /* printf("Adding to conversion map: char(%c) ==> %"PRIu64"\n", node->c, value | (1 << level)); */
   } else {
     create_conversion_map_helper(node->left, value, level + 1);
     create_conversion_map_helper(node->right, value | (1 << level), level + 1);
@@ -356,7 +356,7 @@ int print_conversion_map_header() {
     flipped_code = b_flip_code(conversion_map[i]);
     fprintf(out_stream, "%c", (char) i);
     /* p = (char*) &(conversion_map[i]); */
-    p = (char*) flipped_code;
+    p = (char*) &flipped_code;
     /* for (j = 0; j < sizeof(conversion_map[i]); ++j) { */
     for (j = 0; j < sizeof(flipped_code); ++j) {
       fprintf(out_stream, "%c", (char) *p++);
