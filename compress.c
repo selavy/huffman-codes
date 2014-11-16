@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <limits.h>
+#include <inttypes.h>
 #include <errno.h>
 #include "stack.h"
 #include "heap.h"
@@ -329,20 +330,36 @@ int write_number(int value, int * curr_offset, unsigned char * curr_byte) {
 }
 
 /* Header format: */
-/* 4 bytes, size of header in 2 byte blocks   */
-/* 2 byte blocks:                             */
-/*   + 1 byte, ascii character                */
-/*   + 1 byte, huffman encoding for character */
+/* 4 bytes, size of header in 9 byte blocks   */
+/* 9 byte blocks:                             */
+/*   + 1 byte,  ascii character                */
+/*   + 8 bytes, huffman encoding for character */
 int print_conversion_map_header() {
   int i = 0;
+  int j;
+  char * p;
+
+  /* assert(sizeof(int) == 4); */
+  /* assert(sizeof(uint64_t) == 8); */
+
   /* fprintf(out_stream, "|%d", conversion_map_size); */
-  fprintf(out_stream, "%d", conversion_map_size);
+  /* fprintf(out_stream, "%d", conversion_map_size); */
+  p = (char*) &conversion_map_size;
+  for (; i < sizeof(int); ++i) {
+    fprintf(out_stream, "%c", *p++);
+  }
+
   for (; i < CNT_SZ; ++i) {
     if (conversion_map[i] == 0) {
       continue;
     }
     /* fprintf(out_stream, "|%c|%d", (char) i, conversion_map[i]); */
-    fprintf(out_stream, "%c%d", (char) i, conversion_map[i]);
+    /* fprintf(out_stream, "%c%" PRIu64, (char) i, conversion_map[i]); */
+    fprintf(out_stream, "%c", (char) i);
+    p = (char*) &(conversion_map[i]);
+    for (j = 0; j < sizeof(conversion_map[i]); ++j) {
+      fprintf(out_stream, "%c", (char) *p++);
+    }
   }
   return SUCCESS;
 }
