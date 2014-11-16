@@ -206,6 +206,13 @@ void test_b_reverse() {
   assert(b_reverse(65) == 65);
 }
 
+void test_b_flip_code() {
+  assert(b_flip_code(6) == 5);
+  assert(b_flip_code(5) == 6);
+  assert(b_flip_code(9) == 12);
+  assert(b_flip_code(12) == 9);
+}
+
 int main(int argc, char ** argv) {
   test_initialize_heap(); printf("Passed test_initialize_heap\n");
   test_initialize_node(); printf("Passed test_initialize_node\n");
@@ -217,6 +224,7 @@ int main(int argc, char ** argv) {
   test_stack_push_pop();  printf("Passed test_stack_push_pop\n");
   test_b_len();           printf("Passed test_b_len\n");
   test_b_reverse();       printf("Passed test_b_reverse\n");
+  test_b_flip_code();     printf("Passed test_b_flip_code\n");
   printf("Passed\n");
   return 0;
 }
