@@ -281,15 +281,15 @@ int write_to_output() {
   if (!in_stream) {
     return FAILURE;
   }
-  
   while((ch = fgetc(in_stream)) != EOF) {
     write_number(conversion_map[ch], &offset, &byte);
   }
   if (byte > 0) {
-    /* fprintf(stdout, "|%d\n", byte); */
+    printf("|%d\n", byte); 
     fprintf(out_stream, "%c", byte);
   }
   fprintf(out_stream, "%c", (char) offset);
+  printf("offset = %d\n", offset);
   /* printf("\n"); */
 
   return SUCCESS;
@@ -300,7 +300,7 @@ int write_number(int value, int * curr_offset, unsigned char * curr_byte) {
   unsigned char byte = *curr_byte;
 
   if (offset >= 8) {
-    /* fprintf(out_stream, "|%d", byte); */
+    printf("|%d", byte);
     fprintf(out_stream, "%c", byte);
   }
   if (value == 0) {
@@ -308,7 +308,7 @@ int write_number(int value, int * curr_offset, unsigned char * curr_byte) {
   } else {
     while (value > 1) {
       if (offset >= 8) {
-	/* fprintf(out_stream, "|%d", byte); */
+	printf("|%d", byte);
 	fprintf(out_stream, "%c", byte);
 	byte = 0;
 	offset = 0;
@@ -318,7 +318,7 @@ int write_number(int value, int * curr_offset, unsigned char * curr_byte) {
     }
   }
   if (offset >= 8) {
-    /* fprintf(out_stream, "|%d", byte); */
+    printf("|%d", byte);
     fprintf(out_stream, "%c", byte);
     byte = 0;
     offset = 0;
