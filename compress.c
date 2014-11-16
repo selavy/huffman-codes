@@ -338,9 +338,7 @@ int print_conversion_map_header() {
   int i = 0;
   int j;
   char * p;
-
-  /* assert(sizeof(int) == 4); */
-  /* assert(sizeof(uint64_t) == 8); */
+  uint64_t flipped_code;
 
   /* fprintf(out_stream, "|%d", conversion_map_size); */
   /* fprintf(out_stream, "%d", conversion_map_size); */
@@ -355,9 +353,12 @@ int print_conversion_map_header() {
     }
     /* fprintf(out_stream, "|%c|%d", (char) i, conversion_map[i]); */
     /* fprintf(out_stream, "%c%" PRIu64, (char) i, conversion_map[i]); */
+    flipped_code = b_flip_code(conversion_map[i]);
     fprintf(out_stream, "%c", (char) i);
-    p = (char*) &(conversion_map[i]);
-    for (j = 0; j < sizeof(conversion_map[i]); ++j) {
+    /* p = (char*) &(conversion_map[i]); */
+    p = (char*) flipped_code;
+    /* for (j = 0; j < sizeof(conversion_map[i]); ++j) { */
+    for (j = 0; j < sizeof(flipped_code); ++j) {
       fprintf(out_stream, "%c", (char) *p++);
     }
   }
