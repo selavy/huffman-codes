@@ -51,12 +51,21 @@ static int open_output(char * filename);
 int compress(char * file_in, char * file_out) {
   huffman_tree = 0;
   out_stream = stdout;
+  int i;
   conversion_map_size = 0;
   if (get_counts(file_in) != SUCCESS) {
     print_unable_to_open_file_msg(file_in);
     module_finalize();
     return FAILURE;
   }
+
+  printf("--COUNTS--\n");
+  for (i = 0; i < CNT_SZ; ++i) {
+    if (cnt[i]) {
+      printf("%c : %d\n", i, cnt[i]);
+    }
+  } 
+  printf("--END COUNTS--\n");
   if (generate_huffman_tree() != SUCCESS) {
     print_unable_to_generate_huffman_tree();
     module_finalize();
@@ -191,9 +200,6 @@ int generate_huffman_tree() {
     heap_insert(new_node);
   }
   huffman_tree = heap_pop();
-#ifdef DEBUG
-  printf("%d\n", huffman_tree->weight);
-#endif
   heap_finalize();
   return SUCCESS;
 }
@@ -222,7 +228,7 @@ void create_conversion_map_helper(struct node_t * node, uint64_t value, uint64_t
   } else if (node->c != NOT_LEAF_NODE) {
     conversion_map[node->c] = value | (1 << level);
     ++conversion_map_size;
-    /* printf("Adding to conversion map: char(%c) ==> %"PRIu64"\n", node->c, value | (1 << level)); */
+    printf("Adding to conversion map: char(%c) ==> %"PRIu64"\n", node->c, value | (1 << level));
   } else {
     create_conversion_map_helper(node->left, value, level + 1);
     create_conversion_map_helper(node->right, value | (1 << level), level + 1);
