@@ -6,6 +6,7 @@
 #include "time.h"
 #include "input_module.h"
 #include "stack.h"
+#include "binary_utility.h"
 
 #define SIZE UCHAR_MAX
 

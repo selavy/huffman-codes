@@ -11,10 +11,10 @@ TESTS = tests.o
 UNIT_TESTS = unit_tests
 
 tests: $(LIBS) $(INC) $(TESTS)
-	$(CC) $(CFLAGS) -o $(UNIT_TESTS) $(LIBS) $(INC) $(TESTS)
+	$(CC) $(LIBS) $(TESTS) $(CFLAGS) -o $(UNIT_TESTS)
 
 huffman: $(LIBS) $(INC) $(OBJS)
-	$(CC) $(CFLAGS) -o huffman $(OBJS) $(LIBS) $(INC)
+	$(CC) $(OBJS) $(LIBS) $(CFLAGS) -o $(PROGS) 
 
 main.o: main.c
 	$(CC) $(CFLAGS) -c main.c
