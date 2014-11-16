@@ -1,5 +1,5 @@
 CC = gcc
-DEBUG = -g
+DEBUG = -g -DDEBUG
 #CFLAGS = -Wall -Werror $(DEBUG) -Wint-to-pointer-cast
 CFLAGS = $(DEBUG) -Wint-to-pointer-cast
 

@@ -33,7 +33,9 @@ static int find_in_map(uint64_t n);
 int extract(char * file_in, char * file_out) {
   in_stream = 0;
   out_stream = 0;
-  /* printf("[Extract] in = %s ; out = %s\n", file_in, file_out); */
+#ifdef DEBUG
+  printf("[Extract] in = %s ; out = %s\n", file_in, file_out);
+#endif
   if (open_input_file(file_in) != SUCCESS) {
     printf("Unable to open input file!\n");
     module_finalize();
@@ -90,8 +92,10 @@ int read_header() {
       return FAILURE;
     }
   }
-  /* printf("----BEGIN HEADER----\n"); */
-  /* printf("size = %d.\n", size); */
+#ifdef DEBUG
+  printf("----BEGIN HEADER----\n");
+  printf("size = %d.\n", size);
+#endif
   memset(&(conversion_map[0]), 0, sizeof(conversion_map[0]) * CNT_SZ);
   for (i = 0; i < size; ++i) {
     fscanf(in_stream, "%c", &c);
@@ -101,10 +105,14 @@ int read_header() {
         return FAILURE;
       }
     }
-    /* printf("%c --> %" PRIu64 "\n", c, r); */
+#ifdef DEBUG
+    printf("%c --> %" PRIu64 "\n", c, r);
+#endif
     conversion_map[c] = r;
   }
-  /* printf("----END HEADER----\n"); */
+#ifdef DEBUG
+  printf("----END HEADER----\n");
+#endif
   return SUCCESS;
 }
 
@@ -117,8 +125,9 @@ int read_file() {
   int i;
   uint64_t val = 1;
   int res;
-  /* printf("---READ FILE---\n"); */
-  /* while ((c = fgetc(in_stream) != EOF)) { */
+#ifdef DEBUG
+  printf("---READ FILE---\n");
+#endif
   if (fscanf(in_stream, "%c%c", &c, &n) != 2) {
     /* FIX ME */
     return FAILURE;
@@ -127,7 +136,9 @@ int read_file() {
     for (i = 0; i < 8; ++i) {
       val = (val << 1) | !!(c & (1 << (7-i)));
       if ((res = find_in_map(val)) != NOT_FOUND) {
-        /* printf("FOUND: %c\n", res); */
+#ifdef DEBUG
+        printf("FOUND: %c\n", res);
+#endif
         fprintf(out_stream, "%c", res);
         val = 1;
       }
@@ -135,18 +146,29 @@ int read_file() {
     c = n;
     n = n2;
   }
-
   /* n2 now holds the number of bits that can be read in c. */
-  /* printf("offset = %d\n", n2); */
+#ifdef DEBUG
+  printf("offset = %d\n", n2);
+#endif
   for (i = 0; i < n2; ++i) {
     val = (val << 1) | !!(c & (1 << (7 - i)));
     if ((res = find_in_map(val)) != NOT_FOUND) {
-      /* printf("FOUND: %c\n", res); */
+#ifdef DEBUG
+      printf("FOUND: %c\n", res);
+#endif
       fprintf(out_stream, "%c", res);
       val = 1;
     }
   }
-  /* printf("---END READ FILE---\n"); */
+#ifdef DEBUG
+  printf("left over val = %"PRIu64"\n", val);
+#endif
+  if (val && ((res = find_in_map(val)) != NOT_FOUND)) {
+    fprintf(out_stream, "%c", res);
+  }
+#ifdef DEBUG
+  printf("---END READ FILE---\n");
+#endif
   return SUCCESS;
 }
 
