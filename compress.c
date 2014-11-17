@@ -293,7 +293,7 @@ int write_to_output() {
   while((ch = fgetc(in_stream)) != EOF) {
     write_number(conversion_map[ch], &offset, &byte);
   }
-  if (byte > 0) {
+  if (offset < 8) {
 #ifdef DEBUG
     printf("|%d\n", byte); 
 #endif
