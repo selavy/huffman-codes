@@ -149,8 +149,23 @@ int read_file() {
   /* n2 now holds the number of bits that can be read in c. */
 #ifdef DEBUG
   printf("offset = %d\n", n2);
+  printf("c = %d\n", c);
+  printf("n = %d\n", n);
+  printf("interpreting c\n");
 #endif
-  for (i = 0; i < 8; ++i) {
+
+for (i = 0; i < 8; ++i) {
+  val = (val << 1) | !!(c & (1 << (7 - i)));
+  if ((res = find_in_map(val)) != NOT_FOUND) {
+   #ifdef DEBUG
+    printf("FOUND %c\n", res);
+#endif
+    fprintf(out_stream, "%c", res);
+    val = 1;
+  }
+}
+
+  for (i = 0; i < (7-n2); ++i) {
     val = (val << 1) | !!(c & (1 << (7 - i)));
     if ((res = find_in_map(val)) != NOT_FOUND) {
 #ifdef DEBUG
@@ -160,17 +175,6 @@ int read_file() {
       val = 1;
     }
   }
-  for (i = 0; i < n2; ++i) {
-    val = (val << 1) | !!(n & (1 << (7 - i)));
-    if ((res = find_in_map(val)) != NOT_FOUND) {
-#ifdef DEBUG
-      printf("FOUND: %c\n", res);
-#endif
-      fprintf(out_stream, "%c", res);
-      val = 1;
-    }
-  }
-#
 #ifdef DEBUG
   printf("left over val = %"PRIu64"\n", val);
 #endif
